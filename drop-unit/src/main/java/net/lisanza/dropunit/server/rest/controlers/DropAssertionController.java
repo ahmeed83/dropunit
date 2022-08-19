@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static net.lisanza.dropunit.server.rest.constants.RequestMappings.URI_CLEARALLDROPS;
+import static net.lisanza.dropunit.server.rest.constants.RequestMappings.URI_CLEAR_DROP_ID;
 import static net.lisanza.dropunit.server.rest.constants.RequestMappings.URI_COUNT_DROPID;
 import static net.lisanza.dropunit.server.rest.constants.RequestMappings.URI_COUNT_NOTFOUND;
 import static net.lisanza.dropunit.server.rest.constants.RequestMappings.URI_DELIVERY_ENDPOINT_DROPID;
@@ -50,6 +51,21 @@ public class DropAssertionController {
     public String clearAllDrop() {
         LOGGER.debug("Called clearAllDrop");
         return dropUnitService.dropAll();
+    }
+
+    @DELETE
+    @Path(URI_CLEAR_DROP_ID)
+    public String clearOneDrop(@PathParam("dropId") String dropId) {
+        try {
+            LOGGER.debug("Called clearOneDrop");
+            DropUnitEndpoint endpoint = dropUnitService.lookupEndpoint(dropId);
+            if (endpoint != null) {
+                return dropUnitService.dropOne(dropId);
+            }
+        } catch (Exception e) {
+            LOGGER.warn("Failure generating response clearOneDrop", e);
+        }
+        throw new InternalServerErrorException();
     }
 
     @GET

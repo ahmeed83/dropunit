@@ -43,6 +43,14 @@ public class DropUnitService {
         return stringBuilder.toString();
     }
 
+    public String dropOne(String dropId) {
+        StringBuilder stringBuilder = new StringBuilder();
+        infoLoadedEndpoints(stringBuilder.append("endpoints: "));
+        registrations.removeIf(registration -> registration.getId() != null && registration.getId().equals(dropId));
+        infoLoadedEndpoints(stringBuilder.append(" -> after: "));
+        return stringBuilder.toString();
+    }
+
     public String registerDefault(DropUnitEndpoint endpoint) {
         LOGGER.debug("default before {}", defaults.size());
         String dropId = UUID.randomUUID().toString();
